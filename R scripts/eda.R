@@ -119,6 +119,26 @@ ggsave("image/2.0_correlation_heatmap.pdf")
 
 # 3
 # line chart
+# only pick up the most influential features for a clear view
+
+df.year <- fread("data/data_by_year.csv")
+df.year %>%
+  filter(year<=2020)
+  select(c(acousticness, energy, loudness, popularity)) %>%
+  scale() %>%
+  data.table() -> df.year.scale
+df.year.scale$year <- df.year$year
+melt_year <- melt(df.year.scale, id.vars="year")
+
+ggplot(melt_year , aes(year,value, col=variable)) + 
+  geom_line(size=1) +
+  ggtitle("Standardized feature change over years")
+
+# This is another way to visualize the correlation
+ggsave("image/3.0_line_chart.pdf")
+
+
+
 
 
 
